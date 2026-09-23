@@ -23,17 +23,25 @@ export default function HomeScreen() {
   const [featured, setFeatured] = useState<Property[]>([]);
   const [recomended, setRecomended] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
+  const [, setError] = useState<string | null>(null);
 
   const fetchProperties = async () => {
     setLoading(true);
 
-    const { data: featuredData } = await supabase
+    const { data: featuredData, error: featuredError } = await supabase
       .from("properties")
       .select("*")
       .eq("is_featured", true)
       .order("created_at", { ascending: false });
 
-    const { data: recomendedData } = await supabase
+    if (featuredError) {
+      console.error("Error fetching featured properties:", featuredError);
+      setError("Failed to load featured properties");
+    } else {
+      setFeatured(featuredData ?? []);
+    }
+
+    const { data: recomendedData, error: recomendedError } = await supabase
       .from("properties")
       .select("*")
       .eq("is_featured", false)

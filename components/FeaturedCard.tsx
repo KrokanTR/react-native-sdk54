@@ -22,8 +22,13 @@ export default function FeaturedCard({ property }: { property: Property }) {
       onPress={() => router.push(`/(root)/property/${property.id}`)}
     >
       <Image
-        source={{ uri: property.images[0] }}
-        className="w-full h-44 resize-mode:cover"
+        source={
+          property.images.length > 0
+            ? { uri: property.images[0] }
+            : require("@/assets/images/kribb.png")
+        }
+        className="w-full h-44 
+        resize-mode:cover"
       />
       <View className="absolute top-3 left-3 bg-white/90  px-3 py-1 rounded-full">
         <Text className="text-xs font-semibold text-blue-600 capitalize">
